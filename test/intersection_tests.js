@@ -41,12 +41,38 @@ exports.testIntersectDiamondLine = function(beforeExit, assert) {
   assert.equal(result.points[0].equals(new Point2D(5.75, 5.75)), true);
 }
 
-exports.testIntersectArcLine = function(beforeExit, assert) {
-  var arc = shape("path", {d: "M0 20 A 20 20, 0, 0, 0, 20 0"});
-  var line = shape("line", {x1: 0, y1:0, x2:20, y2:20});
+exports.testIntersectSmallArcLine = function(beforeExit, assert) {
+  var arc = shape("path", {d: "M0 20 A 20 20, 0, 0, 0, 20 0"}); // Quarter circle around origin
+  var line = shape("line", {x1: 0, y1:0, x2:20, y2:20}); // Diagonal right-down
   var result = intersect(arc, line);
 
   assert.equal(1, result.points.length);
   assert.equal(result.points[0].distanceFrom(new Point2D(0, 0)), 20);
   assert.equal(result.points[0].x, result.points[0].y);
+}
+
+exports.testNoIntersectSmallArcLine = function(beforeExit, assert) {
+  var arc = shape("path", {d: "M0 20 A 20 20, 0, 0, 0, 20 0"}); // Quarter circle around origin
+  var line = shape("line", {x1: 0, y1:0, x2:20, y2:-20}); // Diagonal right-up
+  var result = intersect(arc, line);
+
+  assert.equal(0, result.points.length);
+}
+
+exports.testIntersectLargeArcLine = function(beforeExit, assert) {
+  var arc = shape("path", {d: "M0 20 A 20 20, 0, 1, 0, 20 0"}); // Three-quarter circle around 20,20
+  var line = shape("line", {x1: 0, y1:0, x2:40, y2:40}); // Diagonal right-down
+  var result = intersect(arc, line);
+
+  assert.equal(1, result.points.length);
+  assert.equal(result.points[0].distanceFrom(new Point2D(20, 20)), 20);
+  assert.equal(result.points[0].x, result.points[0].y);
+}
+
+exports.testNoIntersectLargeArcLine = function(beforeExit, assert) {
+  var arc = shape("path", {d: "M0 20 A 20 20, 0, 1, 0, 20 0"}); // Three-quarter circle around 20,20
+  var line = shape("line", {x1: 0, y1:0, x2:20, y2:20}); // Diagonal right-down
+  var result = intersect(arc, line);
+
+  assert.equal(0, result.points.length);
 }
