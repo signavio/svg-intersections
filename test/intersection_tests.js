@@ -76,3 +76,15 @@ exports.testNoIntersectLargeArcLine = function(beforeExit, assert) {
 
   assert.equal(0, result.points.length);
 }
+
+exports.testIntersectCircleCircle = function(beforeExit, assert) {
+  var circle1 = shape("circle", {cx:0, cy:0, r:1});
+  var circle2 = shape("circle", {cx:1, cy:1, r:1});
+  var result = intersect(circle1, circle2);
+
+  assert.equal(2, result.points.length);
+  assert.equal(result.points[0].x, 1);
+  assert.equal(result.points[0].y, 0);
+  assert.equal(result.points[1].x, 0);
+  assert.equal(result.points[1].y, 1);
+}
