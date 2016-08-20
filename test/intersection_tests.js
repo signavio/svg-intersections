@@ -88,3 +88,13 @@ exports.testIntersectCircleCircle = function(beforeExit, assert) {
   assert.equal(result.points[1].x, 0);
   assert.equal(result.points[1].y, 1);
 }
+
+exports.testIntersectArcArc = function(beforeExit, assert) {
+  var arc1 = shape("path", {d: "M0 20 A 20 20, 0, 0, 0, 20 0"}); // Quarter circle around origin
+  var arc2 = shape("path", {d: "M0 0 A 20 20, 0, 0, 0, 20 20"}); // Quarter circle around 20,0
+  var result = intersect(arc1, arc2);
+
+  assert.equal(1, result.points.length);
+  assert.ok(Math.abs(result.points[0].x - 10) <= Number.EPSILON * 10);
+  assert.ok(Math.abs(result.points[0].y - 17) <= 1);
+}
