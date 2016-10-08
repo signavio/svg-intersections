@@ -32,7 +32,7 @@
     "path"
   ],
   "dependencies": {
-    "kld-affine": "git+https://github.com/framespaces/kld-affine.git#development",
+    "kld-affine": "^2",
     "kld-polynomial": "https://github.com/thelonious/kld-polynomial.git#development"
   },
   "devDependencies": {
