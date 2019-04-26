@@ -14,16 +14,16 @@ Installation
 API
 ---
 
-This module exports two functions: 
+This module exports two functions:
 
-The `intersect` function takes two shapes as an input an returns an result 
+The `intersect` function takes two shapes as an input an returns an result
 object providing a result status, and all intersection points of the two shapes.
 
 ```intersect (shape1, shape2)```
 
 
-The `shape` function wraps the necessary input parameters for each of 
-the two shapes. It requires the SVG element name of the shape as a string 
+The `shape` function wraps the necessary input parameters for each of
+the two shapes. It requires the SVG element name of the shape as a string
 and an object of the SVG element's attributes.
 
 ```shape (svgElementName, svgAttributes)```
@@ -37,7 +37,7 @@ Usage example
 ![Example image](./images/UsageExample1.png)
 
 ```javascript
-    
+
     var svgIntersections = require('svg-intersections');
     var intersect = svgIntersections.intersect;
     var shape = svgIntersections.shape;
@@ -53,6 +53,6 @@ Usage example
 Credits
 -------
 
-The implementation is based on the intersection procedures by Kevin Lindsey 
-([http://www.kevlindev.com](www.kevlindev.com)) with contributions by 
+The implementation is based on the intersection procedures by Kevin Lindsey
+([http://www.kevlindev.com](www.kevlindev.com)) with contributions by
 Robert Benko ([http://www.quazistax.com](www.quazistax.com)).

@@ -1,4 +1,6 @@
 // expose module classes
+import IntersectionParams from './lib/IntersectionParams';
 
-exports.intersect = require('./lib/intersect');
-exports.shape = require('./lib/IntersectionParams').newShape;
+export const shape = IntersectionParams.newShape;
+
+export {default as intersect} from './lib/intersect';
