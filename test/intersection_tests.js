@@ -1,5 +1,4 @@
-var intersect = require('../index').intersect;
-var shape = require('../index').shape;
+var {intersect, shape} = require('../');
 
 var Point2D = require('kld-affine/lib/Point2D');
 
