@@ -3,7 +3,6 @@ version: 2.1
 orbs:
   blackduck: signavio/blackduck@1.10.0
   fortify: signavio/fortify@2.0.0
-  sonarcloud: sonarsource/sonarcloud@1.1.0
 
 references:
   workspace_root: &workspace_root "/home/circleci/workspace"
@@ -39,23 +38,7 @@ jobs:
           path: *workspace_root
       - run: npm install
       - run: npm run test-with-coverage
-      - run:
-          name: Sonar variables
-          command: |
-            if [ -n "$CIRCLE_PULL_REQUEST" ]; then
-              PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | sed -E "s/.+\/([0-9]+)$/\1/g")
-              SONAR_ARGS="\
-                -Dsonar.pullrequest.key=${PR_NUMBER} \
-                -Dsonar.pullrequest.branch=${CIRCLE_BRANCH} \
-                -Dsonar.pullrequest.base=master"
-            else
-              SONAR_ARGS="\
-                -Dsonar.branch.name=${CIRCLE_BRANCH}"
-            fi
-
-            echo "export $SONAR_ARGS $SONAR_LOGIN" >> "$BASH_ENV"
-            source "$BASH_ENV"
-      - sonarcloud/scan
+      - run: node analyse.js
       - persist_to_workspace:
           root: *workspace_root
           paths:
