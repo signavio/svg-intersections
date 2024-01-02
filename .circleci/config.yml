@@ -52,9 +52,6 @@ jobs:
               SONAR_ARGS="\
                 -Dsonar.branch.name=${CIRCLE_BRANCH}"
             fi
-            SONAR_ARGS+="\
-              -Dsonar.projectKey=com.sap.signavio.svg-intersections \
-              -Dsonar.host.url=https://sonar.tools.sap"
       - sonarcloud/scan
       - persist_to_workspace:
           root: *workspace_root
