@@ -117,25 +117,6 @@ workflows:
           context: SonarQubeSAP
           requires:
             - build
-          filters:
-            branches:
-              only:
-                - /.*sonar.*/
-
-
-  nightly-sonar-qube-scan:
-    triggers:
-      - schedule:
-          cron: '0 0 * * *'
-          filters:
-            branches:
-              only: master
-    jobs:
-      - build
-      - sonar_qube_scan:
-          context: SonarQubeSAP
-          requires:
-            - build
 
   nightly-blackduck-scan:
     triggers:
