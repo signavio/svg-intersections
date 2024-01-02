@@ -53,8 +53,7 @@ jobs:
                 -Dsonar.branch.name=${CIRCLE_BRANCH}"
             fi
 
-            echo "export $SONAR_ARGS" >> "$BASH_ENV"
-            echo "export -Dsonar.login=$SONAR_LOGIN $SONAR_ARGS" >> "$BASH_ENV"
+            echo "export $SONAR_ARGS $SONAR_LOGIN" >> "$BASH_ENV"
             source "$BASH_ENV"
       - sonarcloud/scan
       - persist_to_workspace:
