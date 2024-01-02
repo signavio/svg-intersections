@@ -38,7 +38,9 @@ jobs:
           path: *workspace_root
       - run: npm install
       - run: npm run test-with-coverage
-      - run: |
+      - run:
+          name: Sonar scan
+          run: |
           if [ -n "$CIRCLE_PULL_REQUEST" ]; then
               PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | sed -E "s/.+\/([0-9]+)$/\1/g")
               SONAR_ARGS="\
