@@ -42,12 +42,12 @@ jobs:
           if [ -n "$CIRCLE_PULL_REQUEST" ]; then
               PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | sed -E "s/.+\/([0-9]+)$/\1/g")
               SONAR_ARGS="\
-                -Dsonar.pullrequest.key=${PR_NUMBER} \
-                -Dsonar.pullrequest.branch=${CIRCLE_BRANCH} \
-                -Dsonar.pullrequest.base=main"
+                sonar.pullrequest.key=${PR_NUMBER} \
+                sonar.pullrequest.branch=${CIRCLE_BRANCH} \
+                sonar.pullrequest.base=main"
             else
               SONAR_ARGS="\
-                -Dsonar.branch.name=${CIRCLE_BRANCH}"
+                sonar.branch.name=${CIRCLE_BRANCH}"
             fi
 
           node analyse.js $SONAR_ARGS
