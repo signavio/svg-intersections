@@ -11,16 +11,16 @@ process.argv.forEach(function (val, index, array) {
 if (index > 1) {
     const val_arr = val.split("=")
     if (val_arr[0] === "sonar.branch.name"){
-        options.push({"sonar.branch.name":val_arr[1]})
+        options["sonar.branch.name"] = val_arr[1]
     }
     if (val_arr[0] === "sonar.pullrequest.base"){
-        options.push({"sonar.pullrequest.base":val_arr[1]})
+        options["sonar.pullrequest.base"] = val_arr[1]
     }
     if (val_arr[0] === "sonar.pullrequest.key"){
-        options.push({"sonar.pullrequest.key":val_arr[1]})
+        options["sonar.pullrequest.key"]=val_arr[1]
     }
     if (val_arr[0] === "sonar.pullrequest.branch"){
-        options.push({"sonar.pullrequest.branch":val_arr[1]})
+        options["sonar.pullrequest.branch"]=val_arr[1]
     }
 }
 });
