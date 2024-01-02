@@ -116,6 +116,15 @@ workflows:
   full_workflow:
     jobs:
       - build
+      - sonar_qube_scan:
+          context: SonarQubeSAP
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - /.*sonar.*/
+
 
   nightly-sonar-qube-scan:
     triggers:
