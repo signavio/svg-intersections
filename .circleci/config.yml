@@ -118,8 +118,6 @@ workflows:
       - build
 
   nightly-sonar-qube-scan:
-    context:
-      - SonarQubeSAP
     filters:
       branches:
         only:
@@ -134,7 +132,7 @@ workflows:
     jobs:
       - build
       - sonar_qube_scan:
-          context: BlackDuck
+          context: SonarQubeSAP
           requires:
             - build
 
