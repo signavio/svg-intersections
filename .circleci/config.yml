@@ -41,18 +41,18 @@ jobs:
       - run:
           name: Sonar scan
           run: |
-          if [ -n "$CIRCLE_PULL_REQUEST" ]; then
-              PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | sed -E "s/.+\/([0-9]+)$/\1/g")
-              SONAR_ARGS="\
-                sonar.pullrequest.key=${PR_NUMBER} \
-                sonar.pullrequest.branch=${CIRCLE_BRANCH} \
-                sonar.pullrequest.base=master"
-            else
-              SONAR_ARGS="\
-                sonar.branch.name=${CIRCLE_BRANCH}"
-            fi
+            if [ -n "$CIRCLE_PULL_REQUEST" ]; then
+                PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | sed -E "s/.+\/([0-9]+)$/\1/g")
+                SONAR_ARGS="\
+                  sonar.pullrequest.key=${PR_NUMBER} \
+                  sonar.pullrequest.branch=${CIRCLE_BRANCH} \
+                  sonar.pullrequest.base=master"
+              else
+                SONAR_ARGS="\
+                  sonar.branch.name=${CIRCLE_BRANCH}"
+              fi
 
-          node analyse.js $SONAR_ARGS
+            node analyse.js $SONAR_ARGS
       - persist_to_workspace:
           root: *workspace_root
           paths:
