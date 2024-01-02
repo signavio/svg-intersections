@@ -118,11 +118,6 @@ workflows:
       - build
 
   nightly-sonar-qube-scan:
-    filters:
-      branches:
-        only:
-          - master
-          - /.*sonar.*/
     triggers:
       - schedule:
           cron: '0 0 * * *'
