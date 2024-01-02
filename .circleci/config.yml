@@ -44,7 +44,7 @@ jobs:
               SONAR_ARGS="\
                 sonar.pullrequest.key=${PR_NUMBER} \
                 sonar.pullrequest.branch=${CIRCLE_BRANCH} \
-                sonar.pullrequest.base=main"
+                sonar.pullrequest.base=master"
             else
               SONAR_ARGS="\
                 sonar.branch.name=${CIRCLE_BRANCH}"
