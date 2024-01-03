@@ -28,6 +28,35 @@ jobs:
           root: *workspace_root
           paths:
             - node_modules
+  
+  sonar_qube_scan:
+    docker:
+      - image: cimg/node:16.13
+    working_directory: *workspace_root
+    steps:
+      - checkout:
+          path: *workspace_root
+      - run: npm install
+      - run: npm run test-with-coverage
+      - run:
+          name: Sonar scan
+          command: |
+            if [ -n "$CIRCLE_PULL_REQUEST" ]; then
+                PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | sed -E "s/.+\/([0-9]+)$/\1/g")
+                SONAR_ARGS="\
+                  sonar.pullrequest.key=${PR_NUMBER} \
+                  sonar.pullrequest.branch=${CIRCLE_BRANCH} \
+                  sonar.pullrequest.base=master"
+              else
+                SONAR_ARGS="\
+                  sonar.branch.name=${CIRCLE_BRANCH}"
+              fi
+
+            node analyse.js $SONAR_ARGS
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - node_modules
 
   black_duck_scan:
     docker:
@@ -84,6 +113,10 @@ workflows:
   full_workflow:
     jobs:
       - build
+      - sonar_qube_scan:
+          context: SonarQubeSAP
+          requires:
+            - build
 
   nightly-blackduck-scan:
     triggers:
