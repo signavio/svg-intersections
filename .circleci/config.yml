@@ -18,7 +18,7 @@ jobs:
 
   build:
     docker:
-      - image: cimg/node:16.13-browsers
+      - image: cimg/node:16.20-browsers
     working_directory: *workspace_root
     steps:
       - checkout:
@@ -31,7 +31,7 @@ jobs:
   
   sonar_qube_scan:
     docker:
-      - image: cimg/node:16.13
+      - image: cimg/node:16.20
     working_directory: *workspace_root
     steps:
       - checkout:
@@ -60,7 +60,7 @@ jobs:
 
   black_duck_scan:
     docker:
-      - image: cimg/node:16.13-browsers
+      - image: cimg/node:16.20-browsers
     working_directory: *workspace_root
     steps:
       - checkout:
