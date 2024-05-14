@@ -62,7 +62,9 @@ jobs:
             - node_modules
 
   black_duck_scan:
-    executor: node
+    docker:
+      # blackduck requires node and java
+      - image: cimg/node:lts-browsers
     working_directory: *workspace_root
     steps:
       - checkout:
