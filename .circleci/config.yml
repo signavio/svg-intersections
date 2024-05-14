@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  blackduck: signavio/blackduck@1.10.0
+  blackduck: signavio/blackduck@1.16.5
   fortify: signavio/fortify@2.0.0
 
 references:
