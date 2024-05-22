@@ -123,12 +123,12 @@ workflows:
             - build
 
   nightly-blackduck-scan:
-#    triggers:
-#      - schedule:
-#          cron: '0 0 * * *'
-#          filters:
-#            branches:
-#              only: master
+    triggers:
+      - schedule:
+          cron: '0 0 * * *'
+          filters:
+            branches:
+              only: master
     jobs:
       - build
       - black_duck_scan:
@@ -137,13 +137,13 @@ workflows:
             - build
 
   weekly-fortify-scan:
-#    triggers:
-#      - schedule:
-#          cron: "0 0 * * 0"
-#          filters:
-#            branches:
-#              only:
-#                - master
+    triggers:
+      - schedule:
+          cron: "0 0 * * 0"
+          filters:
+            branches:
+              only:
+                - master
     jobs:
       - fortify-translate-and-scan-upload:
           context:
