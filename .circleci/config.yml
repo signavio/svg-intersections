@@ -74,7 +74,7 @@ jobs:
       - blackduck/blackduck-detect:
           blackduck-project-group: SAP_Signavio_Process_Manager
           blackduck-project-name: svg-intersections
-          blackduck-project-path: *workspace_root
+          blackduck-project-path: "$HOME/workspace"
 
   fortify-translate-and-scan-upload:
     executor: ubuntu
