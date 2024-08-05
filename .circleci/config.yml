@@ -112,6 +112,28 @@ jobs:
                -project signavio-svg-intersections \
                -version master
 
+
+  checkmarx-one-scan:
+    docker:
+      - image: checkmarx/ast-cli
+    steps:
+      - checkout
+      - run:
+          name: 'Run Scan'
+          command: |
+            /app/bin/cx \
+            scan create \
+            -s . \
+            --agent CircleCI \
+            --project-name svg-intersections \
+            --application-name OS_SIGNAVIO_SVG_INTERSECTIONS \
+            --branch $CIRCLE_BRANCH \
+            --base-uri $CX_BASE_URI \
+            --base-auth-uri $CX_BASE_AUTH_URI \
+            --tenant $CX_TENANT \
+            --client-id $CX_CLIENT_ID \
+            --client-secret $CX_CLIENT_SECRET \
+
 workflows:
   version: 2
   full_workflow:
@@ -121,6 +143,13 @@ workflows:
           context: SonarQubeSAP
           requires:
             - build
+      - checkmarx-one-scan:
+          filters:
+            branches:
+              only:
+                - master
+          context:
+            - checkmarx-one
 
   nightly-blackduck-scan:
     triggers:
