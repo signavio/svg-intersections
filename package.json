@@ -35,12 +35,12 @@
   ],
   "dependencies": {
     "kld-affine": "2.0.0",
-    "kld-polynomial": "0.1.1"
+    "kld-polynomial": "0.3.0"
   },
   "devDependencies": {
-    "eslint": "^5.16.0",
-    "mocha": "^9.2.2",
-    "nyc": "^15.1.0",
+    "eslint": "^9.8.0",
+    "mocha": "^10.7.0",
+    "nyc": "^17.0.0",
     "sonarqube-scanner": "^3.3.0"
   },
   "engines": {
