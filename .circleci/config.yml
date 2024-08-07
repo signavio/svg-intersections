@@ -1,8 +1,7 @@
 version: 2.1
 
 orbs:
-  blackduck: signavio/blackduck@1.16.5
-  fortify: signavio/fortify@2.0.0
+  blackduck: signavio/blackduck@1.18.0
 
 references:
   workspace_root: &workspace_root "~/workspace"
@@ -32,7 +31,7 @@ jobs:
           root: *workspace_root
           paths:
             - node_modules
-  
+
   sonar_qube_scan:
     executor: node
     working_directory: *workspace_root
@@ -75,42 +74,29 @@ jobs:
           blackduck-project-group: SAP_Signavio_Process_Manager
           blackduck-project-name: svg-intersections
           blackduck-project-path: "$HOME/workspace"
+          excluded-directories: 'test,node_modules'
+          min-scan-interval: 1
 
-  fortify-translate-and-scan-upload:
-    executor: ubuntu
-    working_directory: *workspace_root
+  checkmarx-one-scan:
+    docker:
+      - image: checkmarx/ast-cli
     steps:
       - checkout
-      - fortify/setup
       - run:
-          name: 'Fortify translate: svg-intersections'
+          name: 'Run Scan'
           command: |
-            set -x
-            sourceanalyzer \
-              -b svg-intersections \
-              -verbose \
-              $(find . -type d -path '*/lib' | paste -s -d ' ')
-
-      - run:
-          name: 'Fortify: scan'
-          command: |
-            sourceanalyzer \
-              -b svg-intersections \
-              -verbose \
-              -scan \
-              -f svg-intersections.fpr
-      - store_artifacts:
-          path: svg-intersections.fpr
-      - run:
-          name: 'Fortify: upload'
-          command: |
-            fortifyclient \
-               -url "$FORTIFY_SSC" \
-               -authtoken "$SSC_API_TOKEN" \
-               uploadFPR \
-               -file svg-intersections.fpr \
-               -project signavio-svg-intersections \
-               -version master
+            /app/bin/cx \
+            scan create \
+            -s . \
+            --agent CircleCI \
+            --project-name svg-intersections \
+            --application-name OS_SIGNAVIO_SVG_INTERSECTIONS \
+            --branch $CIRCLE_BRANCH \
+            --base-uri $CX_BASE_URI \
+            --base-auth-uri $CX_BASE_AUTH_URI \
+            --tenant $CX_TENANT \
+            --client-id $CX_CLIENT_ID \
+            --client-secret $CX_CLIENT_SECRET \
 
 workflows:
   version: 2
@@ -121,14 +107,21 @@ workflows:
           context: SonarQubeSAP
           requires:
             - build
-
-  nightly-blackduck-scan:
-    triggers:
-      - schedule:
-          cron: '0 0 * * *'
+      - checkmarx-one-scan:
           filters:
             branches:
-              only: master
+              only:
+                - master
+          context:
+            - checkmarx-one
+
+  nightly-blackduck-scan:
+#    triggers:
+#      - schedule:
+#          cron: '0 0 * * *'
+#          filters:
+#            branches:
+#              only: master
     jobs:
       - build
       - black_duck_scan:
@@ -136,15 +129,4 @@ workflows:
           requires:
             - build
 
-  weekly-fortify-scan:
-    triggers:
-      - schedule:
-          cron: "0 0 * * 0"
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - fortify-translate-and-scan-upload:
-          context:
-            - fortify
+
