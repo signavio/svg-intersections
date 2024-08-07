@@ -1,8 +1,7 @@
 version: 2.1
 
 orbs:
-  blackduck: signavio/blackduck@1.16.5
-  fortify: signavio/fortify@2.0.0
+  blackduck: signavio/blackduck@1.18.0
 
 references:
   workspace_root: &workspace_root "~/workspace"
@@ -32,7 +31,7 @@ jobs:
           root: *workspace_root
           paths:
             - node_modules
-  
+
   sonar_qube_scan:
     executor: node
     working_directory: *workspace_root
@@ -75,43 +74,8 @@ jobs:
           blackduck-project-group: SAP_Signavio_Process_Manager
           blackduck-project-name: svg-intersections
           blackduck-project-path: "$HOME/workspace"
-
-  fortify-translate-and-scan-upload:
-    executor: ubuntu
-    working_directory: *workspace_root
-    steps:
-      - checkout
-      - fortify/setup
-      - run:
-          name: 'Fortify translate: svg-intersections'
-          command: |
-            set -x
-            sourceanalyzer \
-              -b svg-intersections \
-              -verbose \
-              $(find . -type d -path '*/lib' | paste -s -d ' ')
-
-      - run:
-          name: 'Fortify: scan'
-          command: |
-            sourceanalyzer \
-              -b svg-intersections \
-              -verbose \
-              -scan \
-              -f svg-intersections.fpr
-      - store_artifacts:
-          path: svg-intersections.fpr
-      - run:
-          name: 'Fortify: upload'
-          command: |
-            fortifyclient \
-               -url "$FORTIFY_SSC" \
-               -authtoken "$SSC_API_TOKEN" \
-               uploadFPR \
-               -file svg-intersections.fpr \
-               -project signavio-svg-intersections \
-               -version master
-
+          excluded-directories: 'test,node_modules'
+          min-scan-interval: 1
 
   checkmarx-one-scan:
     docker:
@@ -152,12 +116,12 @@ workflows:
             - checkmarx-one
 
   nightly-blackduck-scan:
-    triggers:
-      - schedule:
-          cron: '0 0 * * *'
-          filters:
-            branches:
-              only: master
+#    triggers:
+#      - schedule:
+#          cron: '0 0 * * *'
+#          filters:
+#            branches:
+#              only: master
     jobs:
       - build
       - black_duck_scan:
@@ -165,15 +129,4 @@ workflows:
           requires:
             - build
 
-  weekly-fortify-scan:
-    triggers:
-      - schedule:
-          cron: "0 0 * * 0"
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - fortify-translate-and-scan-upload:
-          context:
-            - fortify
+
