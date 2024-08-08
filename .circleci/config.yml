@@ -75,7 +75,6 @@ jobs:
           blackduck-project-name: svg-intersections
           blackduck-project-path: "$HOME/workspace"
           excluded-directories: 'test,node_modules'
-          min-scan-interval: 1
 
   checkmarx-one-scan:
     docker:
@@ -116,12 +115,12 @@ workflows:
             - checkmarx-one
 
   nightly-blackduck-scan:
-#    triggers:
-#      - schedule:
-#          cron: '0 0 * * *'
-#          filters:
-#            branches:
-#              only: master
+    triggers:
+      - schedule:
+          cron: '0 0 * * *'
+          filters:
+            branches:
+              only: master
     jobs:
       - build
       - black_duck_scan:
