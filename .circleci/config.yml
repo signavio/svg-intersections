@@ -65,12 +65,25 @@ jobs:
       # blackduck requires node and java
       - image: cimg/node:lts-browsers
     working_directory: *workspace_root
+    parameters:
+      scan-mode:
+        description: "use RAPID on branches to not persist the result and INTELLIGENT as default for the nightly job"
+        default: INTELLIGENT
+        type: enum
+        enum: [INTELLIGENT, RAPID]
+      enable_ctp:
+        default: false
+        description: |
+          Boolean for whether or not to run CTP Scan after OS3 scan. Default is false.
+        type: boolean
     steps:
       - checkout:
           path: *workspace_root
       - attach_workspace:
           at: *workspace_root
       - blackduck/blackduck-detect:
+          enable_ctp: << parameters.enable_ctp >>
+          blackduck-scan-mode: << parameters.scan-mode >>
           blackduck-project-group: SAP_Signavio_Process_Manager
           blackduck-project-name: svg-intersections
           blackduck-project-path: "$HOME/workspace"
@@ -124,6 +137,7 @@ workflows:
     jobs:
       - build
       - black_duck_scan:
+          enable_ctp: true
           context: BlackDuck
           requires:
             - build
