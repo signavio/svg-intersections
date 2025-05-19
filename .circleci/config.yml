@@ -1,10 +1,10 @@
 version: 2.1
 
 orbs:
-  blackduck: signavio/blackduck@1.18.0
+  blackduck: signavio/blackduck@2.2.1
 
 references:
-  workspace_root: &workspace_root "~/workspace"
+  workspace_root: &workspace_root '~/workspace'
 
 executors:
   node:
@@ -15,11 +15,10 @@ executors:
       - image: node:16
   ubuntu:
     machine:
-      image: "ubuntu-2204:current"
+      image: 'ubuntu-2204:current'
     resource_class: 2xlarge
 
 jobs:
-
   build:
     executor: node
     working_directory: *workspace_root
@@ -67,7 +66,7 @@ jobs:
     working_directory: *workspace_root
     parameters:
       scan-mode:
-        description: "use RAPID on branches to not persist the result and INTELLIGENT as default for the nightly job"
+        description: 'use RAPID on branches to not persist the result and INTELLIGENT as default for the nightly job'
         default: INTELLIGENT
         type: enum
         enum: [INTELLIGENT, RAPID]
@@ -86,7 +85,7 @@ jobs:
           blackduck-scan-mode: << parameters.scan-mode >>
           blackduck-project-group: SAP_Signavio_Process_Manager
           blackduck-project-name: svg-intersections
-          blackduck-project-path: "$HOME/workspace"
+          blackduck-project-path: '$HOME/workspace'
           excluded-directories: 'test,node_modules'
 
   checkmarx-one-scan:
@@ -141,5 +140,3 @@ workflows:
           context: BlackDuck
           requires:
             - build
-
-
